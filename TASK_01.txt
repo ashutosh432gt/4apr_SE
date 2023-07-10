@@ -1,0 +1,148 @@
+
+-----------------------------------------------STEP 1 : CREATING DATABASE-----------------------------------------------
+
+CREATE DATABASE amazon
+
+
+-----------------------------------------------STEP 2 : CREATING TABLE(1.PRODUCT)-----------------------------------------------
+
+CREATE TABLE product
+(
+    product_id int PRIMARY KEY AUTO_INCREMENT,
+    product_name varchar(25),
+    Recommended_Price Varchar(25),
+    Category Varchar(25)
+
+)
+
+
+-----------------------------------------------STEP 3 : INSERTING VALUES-----------------------------------------------
+
+INSERT INTO product(product_name,Recommended_Price,Category) VALUES ("SHOES","1200","MEN");
+INSERT INTO product(product_name,Recommended_Price,Category) VALUES ("T-SHIRT","699","MEN");
+INSERT INTO product(product_name,Recommended_Price,Category) VALUES ("SHOES","200","WOMEN");
+INSERT INTO product(product_name,Recommended_Price,Category) VALUES ("WATCHES","2000","UNISEX");
+
+
+-----------------------------------------------STEP 4 : CREATING TABLE(2.CUSTOMER)-----------------------------------------------
+
+CREATE TABLE customer
+(
+    customer_id int PRIMARY KEY AUTO_INCREMENT,
+    first_name varchar(25),
+    last_name varchar(25),
+    City Varchar(25),
+    State Varchar(25),
+    Zip Varchar(25)
+
+)
+
+-----------------------------------------------STEP 5 : INSERTING VALUES-----------------------------------------------
+
+
+INSERT INTO customer(first_name,last_name,City,State,Zip) VALUES ("Ashutosh","Singh","Ahmedabad","Gujrat","380013");
+INSERT INTO customer(first_name,last_name,City,State,Zip) VALUES ("Himanshu","Suthar","Sidhpur","Gujrat","384151");
+INSERT INTO customer(first_name,last_name,City,State,Zip) VALUES ("Kunal","Deora","Sirohi","Rajasthan","307001");
+INSERT INTO customer(first_name,last_name,City,State,Zip) VALUES ("Abhi","Patel","GANDHINAGAR","Gujrat","380002");
+
+-----------------------------------------------STEP 6 : CREATING TABLE(3.SALES)-----------------------------------------------
+
+CREATE TABLE sales
+(
+  sales_id int PRIMARY KEY AUTO_INCREMENT,
+  
+  product_id_fk int,
+  customer_id_fk int,
+    
+  FOREIGN KEY (product_id_fk) REFERENCES product(product_id),
+  FOREIGN KEY (customer_id_fk) REFERENCES customer(customer_id),
+    
+  Sales_Price Varchar(25),
+  Sales_date date
+)
+
+-----------------------------------------------STEP 7 : INSERTING VALUES-----------------------------------------------
+
+
+INSERT INTO sales(product_id_fk,customer_id_fk,Sales_Price,Sales_date) VALUES (1,1,"1100","2023-06-06");
+INSERT INTO sales(product_id_fk,customer_id_fk,Sales_Price,Sales_date) VALUES (2,2,"699","2022-05-05");
+INSERT INTO sales(product_id_fk,customer_id_fk,Sales_Price,Sales_date) VALUES(3,3,"200","2021-06-09");
+INSERT INTO sales(product_id_fk,customer_id_fk,Sales_Price,Sales_date) VALUES(4,4,"2000","2020-06-10");
+
+
+
+----------------------------------------------------------------------------------------------
+                                     [ QUERIES ]
+----------------------------------------------------------------------------------------------
+
+1) Return the FirstName, LastName , ProductName and Sales Price for all products sold in month of 10-12-22
+
+SELECT Firstname, Lastname, prd_name, SalesPrice FROM tblsales,tblproduct,tblcustomer WHERE SalesDate= "10-12-22"
+
+
+
+2) Return the CustomerID, FirstName, and LastName of those individuals in the Customer table who have made no Sales purchases.
+
+SELECT * FROM tblcustomer WHERE CustomerID= 4
+
+
+
+4) Add the following Customer and Sale information to the database. (using store procedure)
+FirstName : Mansi
+LastName : Joshi
+City: Mumbai
+State: MH
+Zip: 400001
+Product ID: 3
+Sale Price: 205
+Sale Date: 05/12/2022
+
+
+
+DELIMITER $$
+CREATE PROCEDURE insertdata()
+BEGIN
+
+INSERT INTO tblcustomer(FirstName, LastName, city, state, zip) VALUES ("Mansi", "Joshi","Mumbai","MH","400001");
+INSERT INTO tblsales(SalesPrice, SalesDate) VALUES ("205","5-12-22");
+
+END
+
+CALL insertdata();
+
+
+
+6) Update the Sale Price to the Recommended Sale Price of those Sales occurring between 6/10/2022 and 6/20/2022.
+
+UPDATE tblsales SET SalesPrice="6000" WHERE SalesDate BETWEEN "10-12-22" AND "13-12-22";
+UPDATE tblproduct SET recommended_price="6000" WHERE prd_id =2
+
+
+8) Largest order taken by each sales person, date wise
+
+SELECT * FROM tblsales ORDER BY SalesPrice DESC
+
+
+5) Return the Product Category and the average Sale Price for those customers who have purchased two or more products 
+
+SELECT category FROM tblproduct;
+SELECT AVG(SalesPrice) FROM tblsales
+
+
+9) Without using a declared iterative construct, return Sale Date and the running total for all sales,
+ordered by the Sale Date in Ascending Order.
+
+SELECT SUM(SalesPrice) FROM tblsales;
+SELECT * FROM tblsales ORDER BY SalesPrice DESC
+
+
+7) Number of Sales by Product Category where the average Recommended Price is 10 or more dollars greater than the average Sale Price.
+
+SELECT AVG(recommended_price) FROM tblproduct WHERE prd_id=2
+
+
+
+
+
+
+
